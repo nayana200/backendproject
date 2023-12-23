@@ -5,7 +5,8 @@ require('dotenv').config()
 const bodyParser = require('body-parser');
 require("./helpers/initmongodb")
 //const User = require('./models/usermodel')
-const aurthroute = require("./routes/aurthrouter")
+const aurthroute = require("./src/routes/aurthrouter")
+// const product = require("./src/routes/product")
 const app = express()
 
 
@@ -22,9 +23,14 @@ app.get('/', async (req, res, next) => {
 
 app.use('/auth', aurthroute)
 
+// app.use("/products", product)
+
+
 app.use(async (req, res, next) => {
     next(createError.NotFound("This route not exists"))
 })
+
+
 
 app.use(async (err, req, res, next) => {
     res.status(err.status || 500)
