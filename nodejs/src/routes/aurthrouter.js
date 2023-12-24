@@ -8,9 +8,9 @@ const Product = require('../models/products')
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const verifyToken = require('../common-middlewares/index')
-const Order = require('../models/order')
-
-
+const order = require('../models/order')
+const crypto = require('crypto');
+const Cart = require("../models/cart")
 
 router.post('/register', formidable(), async function (req, res) {
 
@@ -66,88 +66,118 @@ router.get("/homepage", verifyToken, function (req, res) {
     res.send("welcome to ecommerce website")
 })
 
+router.post('/forgot-password', formidable(), async function (req, res) {
+    try {
+        const email = req.fields.email;
 
+        const user = await data.findOne({ email });
 
-
-const emailConfig = {
-    service: 'gmail',
-    auth: {
-        user: 'nayanareddy2004@gmail.com',
-        pass: 'nayana2021',
-    },
-};
-
-const transporter = nodemailer.createTransport(emailConfig);
-
-// In-memory storage for simplicity (replace with a database in a real application)
-const data2 = [
-    { id: 1, email: 'nayanareddy2004@gmail.com', password: 'hashed_password' },
-];
-
-router.use(bodyParser.urlencoded({ extended: true }));
-
-router.post('/forgot-password', (req, res) => {
-    const { email } = req.body;
-    const user = data2.findOne({ email });
-
-    if (!user) {
-        return res.status(404).send('User not found');
-    }
-
-    // Generate a unique token
-    const token = crypto.randomBytes(20).toString('hex');
-    user.resetToken = token;
-    user.resetTokenExpiration = Date.now() + 3600000; // Token valid for 1 hour
-
-    // Send email with reset link
-    const resetLink = `http://localhost:3000/reset-password/${token}`;
-    const mailOptions = {
-        from: 'nayanareddy2004@gmail.com',
-        to: 'User.email',
-        subject: 'Password Reset',
-        text: `Click the following link to reset your password: ${resetLink}`,
-    };
-
-    transporter.sendMail(mailOptions, (error) => {
-        if (error) {
-            console.error(error);
-            return res.status(500).send('Error sending email');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        res.send('Email sent with instructions to reset your password');
-    });
-});
+        console.log('token')
 
-router.get('/reset-password/:token', (req, res) => {
-    const token = req.params.token;
-    const user = users.find((user) => user.resetToken === token && user.resetTokenExpiration > Date.now());
+        // Generate random reset token for user
+        const token = crypto.randomBytes(20).toString('hex');
+        console.log(token)
+        const resetExpires = Date.now() + 100 * 60 * 60;
 
-    if (!user) {
-        return res.status(403).send('Invalid or expired token');
+        // Update user with reset token and expiration
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = resetExpires;
+        await user.save();
+
+        // Send reset password email for user
+        const transporter = nodemailer.createTransport({
+
+            service: 'gmail',
+            port: 587,
+            auth: {
+                user: 'nayanareddy2004@gmail.com',
+                pass: 'omuhwysutxjufvua'
+            },
+            tls: { rejectUnauthorized: false }
+
+        });
+
+        const mailOptions = {
+            to: user.email,
+            from: 'nayanareddy2004@gmail.com',
+            subject: 'Password Reset',
+            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
+                `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+                `http://localhost:3000/reset/${token}\n\n` +
+                `If you did not request this, please ignore this email and your password will remain unchanged.\n`
+        };
+
+        transporter.sendMail(mailOptions, (error) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            }
+            res.status(200).json({ message: 'Email sent successfully' });
+        });
+
+    } catch (err) {
+        console.error('Error in forgot password:', err);
+        res.status(500).json({ message: 'Server Error' });
     }
-
-    // Render a form to reset the password
-    res.sendFile(__dirname + '/reset-password.html');
 });
 
-router.post('/reset-password/:token', (req, res) => {
-    const token = req.params.token;
-    const newPassword = req.body.newPassword;
 
-    const user = users.find((user) => user.resetToken === token && user.resetTokenExpiration > Date.now());
 
-    if (!user) {
-        return res.status(403).send('Invalid or expired token');
+//  handle password reset link clicks
+router.get('/reset/:token', formidable(), async (req, res) => {
+    try {
+        const { token } = req.params;
+
+
+        const user = await data.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() + 100 * 60 * 60 }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Password reset link is invalid or expired please check again' });
+        }
+
+
+        res.send("this is a token of resetpassword" + " " + token);
+
+    } catch (err) {
+        console.error('Error in password reset:', err);
+        res.status(500).json({ message: 'Server Error' });
     }
-
-    // Update the user's password
-    user.password = newPassword;
-    delete user.resetToken;
-    delete user.resetTokenExpiration;
-
-    res.send('Password reset successfully');
 });
 
+router.post('/reset/:token', formidable(), async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.fields;
 
+        const user = await data.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Password reset link is invalid or expired' });
+        }
+
+
+        const enccryptpassword = await bcrypt.hash(password, 10)
+        user.password = enccryptpassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: 'Password reset successful' });
+
+    } catch (err) {
+        console.error('Error in resetting password:', err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
 
 
 router.post('/products', formidable(), async (req, res) => {
@@ -231,182 +261,142 @@ router.delete('/products/:id', formidable(), async (req, res) => {
 
 
 
-router.post('/orders', formidable(), async (req, res) => {
+router.post("/order", async (req, res) => {
+    const newOrder = new order(req.body);
+
     try {
-        const newOrder = new Product(req.fields);
-        const saveOrder = await newProduct.save();
-        res.status(201).json(saveOrder);
+        const savedOrder = await newOrder.save();
+        res.status(200).json(savedOrder);
+
+    } catch (err) {
+        console.log("hii")
+        res.status(500).json(err);
+    }
+});
+
+
+//UPDATE
+router.put("/order/:id", formidable(), async (req, res) => {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedOrder);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//DELETE
+router.delete("/order/:id", formidable(), async (req, res) => {
+    try {
+        await order.findByIdAndDelete(req.params.id);
+        res.status(200).json("Order has been deleted...");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//GET USER ORDERS
+router.get("/order/find/:userId", formidable(), async (req, res) => {
+    try {
+        const orders = await Order.find({ userId: req.params.userId });
+        res.status(200).json(orders);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// //GET ALL
+
+router.get("/order", formidable(), async (req, res) => {
+    try {
+        const orders = await Order.find();
+        res.status(200).json(orders);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+router.post('/order', formidable(), async (req, res) => {
+    try {
+        const newProduct = new Product(req.fields);
+        const savedProduct = await newProduct.save();
+        res.status(201).json(savedProduct);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.post("/cart", async (req, res) => {
+    const newCart = new Cart(req.body);
 
-// Get all orders
-router.get('/orders', formidable(), async (req, res) => {
     try {
-        const orders = await Order.find().populate('orderItems.product');
-        res.json(orders);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+        const savedCart = await newCart.save();
+        res.status(200).json(savedCart);
 
-// Get a specific order by ID
-router.get('/orders/:id', formidable(), async (req, res) => {
-    try {
-        const orderId = req.params.id;
+    } catch (err) {
 
-        const order = await Order.findById(orderId).populate('orderItems.product');
-
-        if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-
-        res.json(order);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Update an order by ID
-router.put('/orders/:id', formidable(), async (req, res) => {
-    try {
-        const orderId = req.params.id;
-        const { customerName, orderItems } = req.body;
-
-        const totalAmount = orderItems.reduce((total, item) => total + item.quantity * item.unitPrice, 0);
-
-        const updatedOrder = await Order.findByIdAndUpdate(orderId, { customerName, totalAmount, orderItems }, { new: true }).populate('orderItems.product');
-
-        if (!updatedOrder) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-
-        res.json(updatedOrder);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Delete an order by ID
-router.delete('/orders/:id', formidable(), async (req, res) => {
-    try {
-        const orderId = req.params.id;
-
-        const deletedOrder = await Order.findByIdAndDelete(orderId).populate('orderItems.product');
-
-        if (!deletedOrder) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-
-        res.json(deletedOrder);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-
-// Add product to user's cart
-router.post('/cart/add', async (req, res) => {
-    try {
-        const { userId, productId, quantity } = req.body;
-
-        const user = await User.findById(userId);
-        const product = await Product.findById(productId);
-
-        if (!user || !product) {
-            return res.status(404).json({ error: 'User or product not found' });
-        }
-
-        const existingCartItem = user.cart.find(item => item.product.equals(productId));
-
-        if (existingCartItem) {
-            existingCartItem.quantity += quantity || 1;
-        } else {
-            user.cart.push({ product: productId, quantity: quantity || 1 });
-        }
-
-        await user.save();
-
-        res.json(user.cart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Get user's cart
-router.get('/cart/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        const user = await User.findById(userId).populate('cart.product');
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        res.json(user.cart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Remove product from user's cart
-router.delete('/cart/remove', async (req, res) => {
-    try {
-        const { userId, productId } = req.body;
-
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        user.cart = user.cart.filter(item => !item.product.equals(productId));
-        await user.save();
-
-        res.json(user.cart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json(err);
     }
 });
 
 
 
 
+router.put("/cart/:id", formidable(), async (req, res) => {
+    try {
+        const updatedCart = await Cart.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedCart);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//DELETE
+router.delete("/cart/:id", formidable(), async (req, res) => {
+    try {
+        await Cart.findByIdAndDelete(req.params.id);
+        res.status(200).json("Cart has been deleted...");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//GET USER CART
+router.get("/cart/find/:userId", formidable(), async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.params.userId });
+        res.status(200).json(cart);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// //GET ALL
+
+router.get("/cart", formidable(), async (req, res) => {
+    try {
+        const carts = await Cart.find();
+        res.status(200).json(carts);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 
-// router.post('/order', formidable(), async (req, res) => {
-//     try {
-//         const newProduct = new Product(req.fields);
-//         const savedProduct = await newProduct.save();
-//         res.status(201).json(savedProduct);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
 
 
-
-
-// router.post('/login', async (req, res, next) => {
-//     res.send("login route")
-// })
-
-// router.post('/refresh-token', async (req, res, next) => {
-//     res.send("registered refresh-token")
-// })
-// router.delete('/logout', async (req, res, next) => {
-//     res.send("logout route")
-// })
 
 module.exports = router
 
