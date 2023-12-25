@@ -11,6 +11,8 @@ const verifyToken = require('../common-middlewares/index')
 const order = require('../models/order')
 const crypto = require('crypto');
 const Cart = require("../models/cart")
+const Category = require('../models/category')
+
 
 router.post('/register', formidable(), async function (req, res) {
 
@@ -258,6 +260,112 @@ router.delete('/products/:id', formidable(), async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get('/products/add', formidable(), async (req, res) => {
+    try {
+        const { name, price, description, category, quantity, createdBy } = req.body;
+        let productPictures = [];
+
+        if (req.files.length > 0) {
+            productPictures = req.files.map((file) => {
+                return { img: file.location };
+            });
+        }
+
+        const product = new Product({
+            name: name,
+            slug: slugify(name),
+            price,
+            quantity,
+            description,
+            productPictures,
+            category,
+            createdBy: req.user._id,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+router.get("/products/:slug", formidable(), async (req, res) => {
+    try {
+        const { slug } = req.params;
+        Category.findOne({ slug: slug })
+            .select("_id type")
+            .exec((error, category) => {
+                if (error) {
+                    return res.status(400).json({ error });
+                }
+
+                if (category) {
+                    Product.find({ category: category._id }).exec((error, products) => {
+                        if (error) {
+                            return res.status(400).json({ error });
+                        }
+
+                        if (category.type) {
+                            if (products.length > 0) {
+                                res.status(200).json({
+                                    products,
+                                    priceRange: {
+                                        under5k: 5000,
+                                        under10k: 10000,
+                                        under15k: 15000,
+                                        under20k: 20000,
+                                        under30k: 30000,
+                                    },
+                                    productsByPrice: {
+                                        under5k: products.filter((product) => product.price <= 5000),
+                                        under10k: products.filter(
+                                            (product) => product.price > 5000 && product.price <= 10000
+                                        ),
+                                        under15k: products.filter(
+                                            (product) => product.price > 10000 && product.price <= 15000
+                                        ),
+                                        under20k: products.filter(
+                                            (product) => product.price > 15000 && product.price <= 20000
+                                        ),
+                                        under30k: products.filter(
+                                            (product) => product.price > 20000 && product.price <= 30000
+                                        ),
+                                    },
+                                });
+                            }
+                        } else {
+                            res.status(200).json({ products });
+                        }
+                    });
+                }
+            });
+    }
+
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+
+router.get('/categories', formidable(), async (req, res) => {
+    const categories = await Category.find();
+    res.json(categories);
+});
+
+// Create a new category
+router.post('/categories', formidable(), async (req, res) => {
+    const newCategory = new Category(req.body);
+    const savedCategory = await newCategory.save();
+    res.json(savedCategory);
+});
+
+
+
+
+
+
+
+
+
 
 
 

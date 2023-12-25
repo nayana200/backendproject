@@ -10,8 +10,23 @@ const ProductSchema = new mongoose.Schema(
         size: { type: String },
         color: { type: String },
         price: { type: Number, required: true },
+        offer: { type: Number },
+        productPictures: [
+            { img: { type: String } }
+        ],
+        reviews: [
+            {
+                userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+                review: String
+            }
+        ],
+        category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+        createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        updatedAt: Date,
 
     },
+
+
     { timestamps: true }
 
 )
