@@ -12,6 +12,10 @@ const order = require('../models/order')
 const crypto = require('crypto');
 const Cart = require("../models/cart")
 const Category = require('../models/category')
+const Subcategory = require("../models/subcategory")
+const Vendor = require('../models/vendor')
+
+
 
 
 router.post('/register', formidable(), async function (req, res) {
@@ -346,21 +350,122 @@ router.get("/products/:slug", formidable(), async (req, res) => {
 })
 
 
-router.get('/categories', formidable(), async (req, res) => {
-    const categories = await Category.find();
-    res.json(categories);
+// router.get('/categories', formidable(), async (req, res) => {
+//     const categories = await Category.find();
+//     res.json(categories);
+// });
+
+// // Create a new category
+// router.post('/categories', formidable(), async (req, res) => {
+//     const newCategory = new Category(req.body);
+//     const savedCategory = await newCategory.save();
+//     res.json(savedCategory);
+// });
+
+
+router.post('/categories', async (req, res) => {
+    try {
+        const category = new Category(req.body);
+        await category.save();
+        res.status(201).json(category);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-// Create a new category
-router.post('/categories', formidable(), async (req, res) => {
-    const newCategory = new Category(req.body);
-    const savedCategory = await newCategory.save();
-    res.json(savedCategory);
+// Get all categories
+router.get('/categories', async (req, res) => {
+    try {
+        const categories = await Category.find().populate('subcategories');
+        res.json(categories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Create a new subcategory
+router.post('/subcategories', async (req, res) => {
+    try {
+        const subcategory = new Subcategory(req.body);
+        await subcategory.save();
+        res.status(201).json(subcategory);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get all subcategories
+router.get('/subcategories', async (req, res) => {
+    try {
+        const subcategories = await Subcategory.find();
+        res.json(subcategories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 
+router.post('/vendors', async (req, res) => {
+    try {
+        const vendor = new Vendor(req.body);
+        await vendor.save();
+        res.status(201).json(vendor);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
+// Get all vendors
+router.get('/vendors', async (req, res) => {
+    try {
+        const vendors = await Vendor.find();
+        res.json(vendors);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
+// Get a specific vendor by ID
+router.get('/vendors/:id', async (req, res) => {
+    try {
+        const vendor = await Vendor.findById(req.params.id);
+        if (!vendor) {
+            res.status(404).json({ error: 'Vendor not found' });
+        } else {
+            res.json(vendor);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update a vendor by ID
+router.put('/vendors/:id', async (req, res) => {
+    try {
+        const vendor = await Vendor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!vendor) {
+            res.status(404).json({ error: 'Vendor not found' });
+        } else {
+            res.json(vendor);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete a vendor by ID
+router.delete('/vendors/:id', async (req, res) => {
+    try {
+        const vendor = await Vendor.findByIdAndDelete(req.params.id);
+        if (!vendor) {
+            res.status(404).json({ error: 'Vendor not found' });
+        } else {
+            res.json({ message: 'Vendor deleted successfully' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 
