@@ -606,10 +606,70 @@ router.get("/cart", formidable(), async (req, res) => {
         res.status(500).json(err);
     }
 });
+router.post('/addToCart', async (req, res) => {
+    const { userID, productID, quantity } = req.body;
 
+    try {
+        const product = await Product.findById(productID);
 
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
 
+        if (product.stock < quantity) {
+            return res.status(400).json({ error: 'Insufficient stock' });
+        }
 
+        const vendor = await Vendor.findOne({ products: productID });
+
+        if (vendor) {
+            const updatedStock = product.stock - quantity;
+            await Product.findByIdAndUpdate(productID, { stock: updatedStock });
+        } else {
+            return res.status(404).json({ error: 'Vendor not found for the product' });
+        }
+
+        const cartItem = { product: productID, quantity };
+        await Cart.findOneAndUpdate({ userID }, { $push: { items: cartItem } }, { upsert: true });
+
+        res.status(200).json({ message: 'Product added to cart successfully' });
+    } catch (error) {
+        console.error('Error adding to cart:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// API endpoint to remove items from the user's cart
+router.post('/removeFromCart', async (req, res) => {
+    const { userID, productID, quantity } = req.body;
+
+    try {
+        const cartItem = { product: productID, quantity };
+
+        // Remove the item from the user's cart
+        await Cart.findOneAndUpdate({ userID }, { $pull: { items: cartItem } });
+
+        const vendor = await Vendor.findOne({ products: productID });
+
+        if (vendor) {
+            const product = await Product.findById(productID);
+
+            if (product) {
+                const updatedStock = product.stock + quantity;
+                await Product.findByIdAndUpdate(productID, { stock: updatedStock });
+            } else {
+                return res.status(404).json({ error: 'Product not found' });
+            }
+        } else {
+            return res.status(404).json({ error: 'Vendor not found for the product' });
+        }
+
+        res.status(200).json({ message: 'Product removed from cart successfully' });
+    } catch (error) {
+        console.error('Error removing from cart:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 module.exports = router
 
