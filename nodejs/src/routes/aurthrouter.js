@@ -16,8 +16,6 @@ const Subcategory = require("../models/subcategory")
 const Vendor = require('../models/vendor')
 
 
-
-
 router.post('/register', formidable(), async function (req, res) {
 
     let { firstname, lastname, email, phone, password } = req.fields
@@ -349,20 +347,6 @@ router.get("/products/:slug", formidable(), async (req, res) => {
     }
 })
 
-
-// router.get('/categories', formidable(), async (req, res) => {
-//     const categories = await Category.find();
-//     res.json(categories);
-// });
-
-// // Create a new category
-// router.post('/categories', formidable(), async (req, res) => {
-//     const newCategory = new Category(req.body);
-//     const savedCategory = await newCategory.save();
-//     res.json(savedCategory);
-// });
-
-
 router.post('/categories', async (req, res) => {
     try {
         const category = new Category(req.body);
@@ -466,13 +450,6 @@ router.delete('/vendors/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
-
-
-
-
-
-
 
 router.post("/order", async (req, res) => {
     const newOrder = new order(req.body);
@@ -665,11 +642,13 @@ router.post('/removeFromCart', async (req, res) => {
         }
 
         res.status(200).json({ message: 'Product removed from cart successfully' });
+
     } catch (error) {
         console.error('Error removing from cart:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 module.exports = router
 

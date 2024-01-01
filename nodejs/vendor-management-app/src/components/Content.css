@@ -1,0 +1,44 @@
+.navbar {
+    background-color: #333;
+    padding: 15px;
+  }
+  
+  .nav-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .nav-item {
+    margin-right: 15px;
+  }
+  
+  .nav-item a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown-content a {
+    color: #fff;
+    padding: 10px;
+    display: block;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  

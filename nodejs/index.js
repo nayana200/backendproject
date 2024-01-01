@@ -9,7 +9,8 @@ require("./helpers/initmongodb")
 const aurthroute = require("./src/routes/aurthrouter")
 // const product = require("./src/routes/product")
 const app = express()
-
+const cors = require("cors")
+app.use(cors())
 
 app.use(morgan('dev'))
 

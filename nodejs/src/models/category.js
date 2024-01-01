@@ -4,7 +4,6 @@ const categorySchema = new mongoose.Schema(
 
         slug: {
             type: String,
-
         },
         name: {
             type: String,
