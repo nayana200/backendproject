@@ -1,8 +1,7 @@
-// src/components/Navbar.js
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-
+import { useUser } from "../signinsignup/useContext";
 import Form from 'react-bootstrap/Form';
 import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -15,10 +14,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
-// import MenuIcon from '@mui/icons-material/Menu';
+
 import Button from '@mui/material/Button';
-import './products/pro.css'
-import { useUser } from '../components/signinsignup/useContext'
+import '../products/pro.css'
+
 
 const categories = [
     'Electronics',
@@ -30,7 +29,7 @@ const categories = [
     'Sports & Outdoors',
     'Automotive',
     'Movies & TV Shows',
-    // Add more categories as needed
+
 ];
 
 const Navbar = (props) => {
@@ -38,7 +37,7 @@ const Navbar = (props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
     const [accountMenuAnchor, setAccountMenuAnchor] = React.useState(null);
-    // const [cartMenuAnchor, setCartMenuAnchor] = React.useState(null);
+
 
 
     const handleMenuClose = () => {
@@ -60,13 +59,7 @@ const Navbar = (props) => {
         setAccountMenuAnchor(null);
     };
 
-    // const handleCartMenuOpen = (props) => {
-    //     setCartMenuAnchor(props.currentTarget);
-    // };
 
-    // const handleCartMenuClose = () => {
-    //     setCartMenuAnchor(null);
-    // };
     const imageUrl = 'https://pixeltemplate.com/wordpress/shopeur/wp-content/themes/Shopeur/images/webi/logo.png';
 
     return (
@@ -138,7 +131,7 @@ const Navbar = (props) => {
                         </Popover>
                         <Form className="d-flex">
                             <Form.Control type="search" placeholder="Search" style={{ width: "400px", border: "1px solid #00000" }} className=" border-0 " aria-label="Search" />
-                            <Button variant="warning" style={{ background: "yellow", color: "black" }}>Search</Button>
+                            <Button variant="warning" style={{ background: "rgb(246, 215, 47)", color: "black" }}>Search</Button>
                         </Form>
 
                     </div>
@@ -183,7 +176,7 @@ const Navbar = (props) => {
                                             <h6>
                                                 <Link to="/cart" className="text-decoration-none text-black">My Cart</Link>
                                             </h6>
-                                            <p style={{ color: "grey", fontSize: "smaller" }}>Rs.{ }</p>
+                                            <p style={{ color: "grey", fontSize: "smaller" }}></p>
                                         </div>
                                         <br></br>
 

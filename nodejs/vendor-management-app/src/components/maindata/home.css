@@ -1,0 +1,41 @@
+/* custom.css */
+
+/* Override Bootstrap styles for specific components */
+.custom-dropdown-menu {
+    width: 200px; /* Adjust the width as needed */
+  }
+  
+  /* Reduce the height of each sidebar item */
+  .list-unstyled li {
+    padding: 0.75rem 1.5rem; /* Adjust the padding to control the height */
+  }
+  
+  /* Styling for Mega Menu */
+  .mega-menu {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .mega-menu-column {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .mega-menu h5 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .mega-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .mega-menu li {
+    margin-bottom: 5px;
+  }
+  
+  /* Add any additional styles or overrides as needed */
+  

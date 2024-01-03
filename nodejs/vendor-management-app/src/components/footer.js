@@ -12,7 +12,7 @@ function Footer
         <div className="container-fluid bg-light mt-5">
             <footer className="  ">
                 <div className="container-fulid ">
-                    <Navbar expand="lg" className="rounded bg-primary    ">
+                    <Navbar expand="lg" className="rounded bg-primary ">
                         <div className="container-fulid">
                             <Navbar.Toggle aria-controls="navbarScroll" />
                             <Navbar.Collapse id="navbarScroll">
@@ -41,7 +41,7 @@ function Footer
                             <div className="d-flex ">
                                 <div className="col">
                                     <h5>CONTACT US</h5>
-                                    <ul className="list-unstyled text-small" style={{ lineHeight: "2.0" }}>
+                                    <ul className="list-unstyled text-small" style={{ lineHeight: "1.2" }}>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}><i className="fa fa-xl  fa-location-dot"></i> 1093 Marigold Lane, Coral Way, Miami,<br /> Florida, 33169
                                         </a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}><i className=" fa fa-xl fa-phone"></i> 610-403-403</a></li>
@@ -58,7 +58,7 @@ function Footer
                             <div className="d-flex ">
                                 <div className="col">
                                     <h5>MY ACCOUNT</h5>
-                                    <ul className="list-unstyled text-small" style={{ lineHeight: "2.0" }}>
+                                    <ul className="list-unstyled text-small" style={{ lineHeight: "0.2" }}>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Cool stuff</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Random feature</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Team feature</a></li>
@@ -71,7 +71,7 @@ function Footer
                             <div className="d-flex ">
                                 <div className="col">
                                     <h5>CATEGORIES</h5>
-                                    <ul className="list-unstyled text-small" style={{ lineHeight: "2.0" }}>
+                                    <ul className="list-unstyled text-small" style={{ lineHeight: "0.2" }}>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Resource</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }} >Resource name</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Another resource</a></li>
@@ -82,7 +82,7 @@ function Footer
                             <div className="d-flex ">
                                 <div className="col">
                                     <h5>INFORMATION</h5>
-                                    <ul className="list-unstyled text-small" style={{ lineHeight: "2.0" }}>
+                                    <ul className="list-unstyled text-small" style={{ lineHeight: "0.2" }}>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none", lineHeight: "1.3" }}>Business</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Education</a></li>
                                         <li><a className="text-muted" href="eee" style={{ textDecoration: "none" }}>Education</a></li>

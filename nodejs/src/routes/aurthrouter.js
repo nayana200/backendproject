@@ -14,7 +14,7 @@ const Cart = require("../models/cart")
 const Category = require('../models/category')
 const Subcategory = require("../models/subcategory")
 const Vendor = require('../models/vendor')
-
+const upload = require('./multer')
 
 router.post('/register', formidable(), async function (req, res) {
 
@@ -184,17 +184,41 @@ router.post('/reset/:token', formidable(), async (req, res) => {
 });
 
 
-router.post('/products', formidable(), async (req, res) => {
+// router.post('/products', formidable(), async (req, res) => {
+//     const { name, price, quantity, color, brand, main_category, sub_category, vendor_id } = req.body
+//     // const image = req.file
+//     // console.log(image)
+//     if (name && price && quantity && color && brand && main_category && sub_category && vendor_id) {
+//         try {
+//             const checkVendor = await vendor_collection.findOne({ _id: vendor_id })
+//             if (checkVendor) {
+//                 const uploadProducts = await product_collection.create({ name: name, price: price, quantity: quantity, color: color, brand: brand, main_category: main_category, sub_category: sub_category, vendor: vendor_id })
+//                 const updateVendor = await vendor_collection.updateOne({ _id: vendor_id }, { $push: { products: uploadProducts._id } })
+//                 return res.status(200).send('products added successfully')
+//             }
+//             else {
+//                 return res.status(400).send('only vendors can add products')
+//             }
+
+//         }
+//         catch (error) {
+//             return res.status(500).send('server error')
+//         }
+//     }
+//     else {
+//         return res.status(400).send('provide the proper details')
+//     }
+// })
+
+router.post('/products', async (req, res) => {
     try {
-        const newProduct = new Product(req.fields);
-        const savedProduct = await newProduct.save();
-        res.status(201).json(savedProduct);
+        const data = new Product(req.body);
+        await data.save();
+        res.status(201).json(data);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error 6778' });
+        res.status(400).json({ error: error.message });
     }
 });
-
 
 
 router.get('/products', formidable(), async (req, res) => {

@@ -1,55 +1,60 @@
-
 import React from 'react';
-import Navbar from "./components/navbar";
-// import Homepage from './components/home';
-import Main from './components/main';
-// import Content from './components/Content';
-import YourComponent from './components/newdata';
-import ShippingComponent from './components/shipping'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import SideNav from './components/maindata/home'
 
-// import Annocument from './components/Annocument'
-import Products from './components/products';
+import Cart from './components/cart/cart';
+import { UserProvider } from './components/signinsignup/useContext';
 
-// import productServices from './components/products'
-import NewArrivals from './components/newarrivals/NewArrivals';
-import SubNavbar from './components/subnavbar'
-import Footer from './components/footer'
+import Login from './components/signinsignup/signin'
+import Register from './components/signinsignup/signup'
+import ResetPassword from './components/signinsignup/resetpassword'
+import SingleProduct from './components/productsdetails/singleproduct'
+import CheckoutForm from './components/order/checkout';
 
-import Themeextimg from './components/textimg'
-// import TopProducts from './components/topcatgioes'
-// import Dcard from './components/discount/Dcard'
-import Scrollimg from './components/scrollimg'
+
+import FAQ from './components/Faq/Faq';
+import Features from './components/features/features'
+import Service from './components/servies/servies'
+import Contact from './components/contact/contact'
 import Lasttestnews from './components/lasttestnews';
-// import FlashCard from './components/flashDeals/FlashCard'
-import ProductData from './components/products/pro';
+import AccessorySideNav from './components/accessories/accossies'
+import MainHome from './components/main/Main';
 const App = () => {
   return (
-    <div className='body-div'>
 
-      <Main />
-      <Navbar />
-      <SubNavbar />
-      {/* <Content /> */}
+    <BrowserRouter>
+      <UserProvider>
 
-      {/* <Categioes /> */}
-      <YourComponent />
-      <ShippingComponent />
-      {/* <Imges />
-      <Products /> */}
-      {/* <TopProducts /> */}
-      {/* <productServices /> */}
 
-      {/* <Homepage /> */}
-      <Products />
-      {/* <Annocument /> */}
-      <NewArrivals />
-      <ProductData />
-      <Themeextimg />
+        <Routes>
 
-      <Lasttestnews />
-      <Scrollimg />
-      <Footer />
-    </div>
+
+
+          <Route path="/data" element={<SideNav />} />
+
+          <Route path="/signin" element={<Login />} />
+
+          <Route path='/signup' element={<Register />} />
+          <Route path='/reset/:token' element={<ResetPassword />} />
+          <Route path='/cart' element={<Cart />} />
+          {/* <Route path='/' element={<Homepage />} /> */}
+          <Route path='/' element={<MainHome />} />
+          <Route path='/products/:productId' element={<SingleProduct />} />
+          <Route path='/Faq' element={<FAQ />} />
+          <Route path='/features' element={<Features />} />
+          <Route path='/servies' element={<Service />} />
+
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/accossies' element={<AccessorySideNav />} />
+          <Route path='/cehckout' element={<CheckoutForm />} />
+          <Route path='/lasttestnews' element={<Lasttestnews />} />
+        </Routes>
+
+
+
+      </UserProvider>
+    </BrowserRouter>
+
   );
 };
 

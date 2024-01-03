@@ -1,0 +1,40 @@
+.container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider-container {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .img {
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .img:hover {
+    transform: scale(1.1);
+  }
+  
+  .icons-container {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    top:30%;
+    transform: translateX(-50%);
+  }
+  
+  .img:hover .icons-container {
+    display: flex;
+ 
+  }
+  
+  .icon {
+    margin-right: 25px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+  

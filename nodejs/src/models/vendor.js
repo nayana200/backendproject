@@ -29,3 +29,14 @@ const vendorSchema = new mongoose.Schema({
 const Vendor = mongoose.model('Vendor', vendorSchema);
 
 module.exports = Vendor;
+
+// const mongoose = require('mongoose');
+// const vendor_schema = new mongoose.Schema({
+//     details: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+//     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'product' }]
+// })
+
+
+// const vendor_collection = new mongoose.model('vendor', vendor_schema)
+
+// module.exports = vendor_collection

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './pro.css';
 
-function CartList({ cart }) {
+function CartList({ cart, product, addToCart }) {
 
     const [CART, setCART] = useState([])
 
@@ -12,7 +12,7 @@ function CartList({ cart }) {
     return (
         <div>
             {
-                CART?.map((cartItem, cartindex, props) => {
+                CART?.map((cartItem, cartindex, props, productItem) => {
                     return (
                         <div>
                             <div className='container'>
@@ -54,7 +54,8 @@ function CartList({ cart }) {
                                             }}
                                         >+</button>
                                         <span> Rs. {cartItem.price * cartItem.quantity} </span>
-                                        <button className='btn btn-primary'>ADD TO CART</button>
+
+
                                         <hr></hr>
                                         <i className="fa-regular fa-heart"></i>Add to Wishlist
                                         <i className="fa-regular fa-heart"></i>Compare

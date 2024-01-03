@@ -1,106 +1,113 @@
-import React, { useContext, useState } from 'react'
-import { NavLink } from 'react-router-dom';
-import { Logincontext } from '../context/Contextprovider';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useUser } from './useContext'
+import axios from "axios";
 
 
-const Sign_in = () => {
+const Login = () => {
+    const { login } = useUser();
 
-    const { account, setAccount } = useContext(Logincontext);
-
-    const [logdata, setData] = useState({
+    const [formData, setFormData] = useState({
         email: "",
-        password: ""
+        password: "",
     });
 
-    // console.log(data);
-
-    const adddata = (e) => {
-        const { name, value } = e.target;
-        // console.log(name, value);
-
-        setData((pre) => {
-            return {
-                ...pre,
-                [name]: value
-            }
-        })
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
     };
 
-    const senddata = async (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { email, password } = logdata;
-        // console.log(email);
+        const form = new FormData();
+        form.append('email', formData.email);
+        form.append('password', formData.password);
+
         try {
-            const res = await fetch("/login", {
-                method: "POST",
+            const response = await axios.post("http://localhost:4000/auth/login", form, {
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email, password
-                })
+
             });
+            login(response.data._id);
+            alert("Login successful")
+            console.log('User ID:', response.data._id);
+            console.log('Login successful:', response.data);
 
-
-            const data = await res.json();
-            // console.log(data);
-
-            if (res.status === 400 || !data) {
-                console.log("invalid details");
-                toast.error("Invalid Details 👎!", {
-                    position: "top-center"
-                });
-            } else {
-                setAccount(data);
-                setData({ ...logdata, email: "", password: "" })
-                toast.success("Login Successfully done 😃!", {
-                    position: "top-center"
-                });
-            }
-        } catch (error) {
-            console.log("login page ka error" + error.message);
+        }
+        catch (error) {
+            console.error("Error registering user:", error.message);
         }
     };
 
-    return (
-        <section>
-            <div className="sign_container">
-                <div className="sign_header">
-                    <img src="./blacklogoamazon.png" alt="signupimg" />
-                </div>
-                <div className="sign_form">
-                    <form method="POST">
-                        <h1>Sign-In</h1>
 
-                        <div className="form_data">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" name="email"
-                                onChange={adddata}
-                                value={logdata.email}
-                                id="email" />
-                        </div>
-                        <div className="form_data">
-                            <label htmlFor="password">Password</label>
-                            <input type="password" name="password"
-                                onChange={adddata}
-                                value={logdata.password}
-                                id="password" placeholder="At least 6 characters" />
-                        </div>
-                        <button type="submit" className="signin_btn" onClick={senddata}>Continue</button>
-                    </form>
-                    <ToastContainer />
-                </div>
-                <div className="create_accountinfo">
-                    <p>New to Amazon?</p>
-                    <button>  <NavLink to="/signup">Create your Amazon Account</NavLink></button>
+    const handleForgotPassword = async () => {
+        try {
+            const response = await axios.post('http://localhost:4000/auth/forgot-password', {
+                email: formData.email,
+            });
+
+            alert(response.data.msg);
+        } catch (error) {
+            console.error('Error sending forgot password request:', error.message);
+        }
+    };
+
+
+    return (
+        <>
+            <div className="container">
+                <div className="row">
+                    <div className="col-4 offset-4 mt-5 mb-5 d-flex flex-column align-items-center justify-content-center"
+                        style={{ height: "400px", width: "400px", border: "1px solid lightgrey", borderRadius: "10px", boxShadow: "7px 7px 8px #888888" }}>
+
+                        <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
+                            <div className="mb-4">
+                                <h4 style={{ textAlign: "center" }}>Login</h4>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="exampleInputEmail1" className="form-label">
+                                    Email address
+                                </label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="email"
+                                    aria-describedby="emailHelp"
+                                    onChange={handleChange}
+                                />
+                                <div id="emailHelp" className="form-text">
+                                    Encrypted Your Data We will not share to anyone.
+                                </div>
+                            </div>
+                            <div className="mb-3">
+                                <div className="d-flex justify-content-between">
+                                    <label for="exampleInputPassword1" className="form-label">Password</label>
+                                    <span onClick={handleForgotPassword} className="text-decoration-none" style={{ cursor: 'pointer', color: 'blue' }}>
+                                        Forgot password?
+                                    </span>
+
+                                </div>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="password"
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary">Login</button>
+                            <div className="mt-3">
+                                <p><Link to="/register">New user ? register now</Link></p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-        </section>
+        </>
     )
 }
 
-export default Sign_in
+export default Login;
