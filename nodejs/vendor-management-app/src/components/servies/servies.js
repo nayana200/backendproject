@@ -1,15 +1,25 @@
+
 import React from 'react'
+import Navbar from '../navbar/navbar'
+import SubNav2 from '../navbar/secnavbar'
+import Main from '../navbar/respo'
+import MainNav from '../navbar/subnavbar'
+import Footer from '../footer'
 
 const Services = () => {
+
     return (
         <div>
-
+            <Navbar />
+            <SubNav2 />
+            <Main />
+            <MainNav />
             <div className="container">
                 <div className="row">
                     <div className="col-md-4 col-12">
                         <div className="features mt-5">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/pen.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/pen.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
 
                             <div className="content mt-4">
@@ -22,7 +32,7 @@ const Services = () => {
                     <div className="col-md-4 col-12 mt-5">
                         <div className="features">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/video.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/video.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
 
                             <div className="content mt-4">
@@ -35,7 +45,7 @@ const Services = () => {
                     <div className="col-md-4 col-12 mt-5">
                         <div className="features">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/intellectual.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/intellectual.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
 
                             <div className="content mt-4">
@@ -48,7 +58,7 @@ const Services = () => {
                     <div className="col-md-4 col-12 mt-5">
                         <div className="features">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/user.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/user.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
 
                             <div className="content mt-4">
@@ -61,7 +71,7 @@ const Services = () => {
                     <div className="col-md-4 col-12 mt-5">
                         <div className="features">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/calendar.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/calendar.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
 
                             <div className="content mt-4">
@@ -74,7 +84,7 @@ const Services = () => {
                     <div className="col-md-4 col-12 mt-5">
                         <div className="features">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/sand-clock.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/intellectual.svg" className="avatar avatar-small" alt="" width={"100px"} height={"80px"} />
                             </div>
                             <div className="content mt-4">
                                 <h4 className="title-2">Real Time Zone</h4>
@@ -191,7 +201,9 @@ const Services = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
+
     )
 }
 

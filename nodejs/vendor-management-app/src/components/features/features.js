@@ -72,10 +72,18 @@
 import React from "react";
 import { Container, Row, Col, Dropdown } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
-
+import Navbar from '../navbar/navbar'
+import SubNav2 from '../navbar/secnavbar'
+import Main from '../navbar/respo'
+import MainNav from '../navbar/subnavbar'
+import Footer from '../footer'
 function Features() {
     return (
         <>
+            <Navbar />
+            <SubNav2 />
+            <Main />
+            <MainNav />
             <Container>
                 <Row>
                     <Col className="col-3">
@@ -138,6 +146,7 @@ function Features() {
                     </Col>
                 </Row>
             </Container>
+            <Footer />
         </>
     );
 }

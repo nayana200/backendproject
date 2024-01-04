@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const CheckoutForm = () => {
     return (
         <div>
@@ -182,7 +182,7 @@ const CheckoutForm = () => {
                                 </ul>
 
                                 <div className="mt-4 pt-2">
-                                    <a href="shop-checkouts.html" className="btn btn-block btn-primary">Place Order</a>
+                                    <Link to='./'><a href="shop-checkouts.html" className="btn btn-block btn-primary">Place Order</a></Link>
                                 </div>
                             </div>
                         </div>

@@ -87,8 +87,9 @@ const Login = () => {
                                 <div className="d-flex justify-content-between">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
                                     <span onClick={handleForgotPassword} className="text-decoration-none" style={{ cursor: 'pointer', color: 'blue' }}>
-                                        Forgot password?
+                                        <Link to='/resetpassword'>Forgot password?</Link>
                                     </span>
+
 
                                 </div>
                                 <input
@@ -100,7 +101,7 @@ const Login = () => {
                             </div>
                             <button type="submit" className="btn btn-primary">Login</button>
                             <div className="mt-3">
-                                <p><Link to="/register">New user ? register now</Link></p>
+                                <p><Link to="/signup">New user ? register now</Link></p>
                             </div>
                         </form>
                     </div>

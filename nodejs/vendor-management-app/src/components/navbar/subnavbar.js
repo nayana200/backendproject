@@ -8,7 +8,7 @@ function MainNav(props) {
         <Col className="flex-grow-1">
             <ul className="list-unstyled d-flex fw-bolder gap-5 align-items-center" style={{ marginLeft: '30px' }}>
                 <li><Link className="text-decoration-none text-white" to='/'>HOME</Link></li>
-                <li><Link className="text-decoration-none text-white" to='/accossies'>SHOP</Link></li>
+                <li><Link className="text-decoration-none text-white">SHOP</Link></li>
                 <li>
                     <Link to='/lasttestnews'>
                         <Dropdown>
@@ -35,8 +35,8 @@ function MainNav(props) {
                             <Dropdown.Item href="#/action-2"><Link className="text-decoration-none text-black" to='/Faq'>FAQs PAGE</Link></Dropdown.Item>
                             <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black">GALLERY</Link></Dropdown.Item>
                             <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black">ELEMENTS</Link></Dropdown.Item>
-                            <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black">PAGE 404</Link></Dropdown.Item>
-                            <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black">ABOUT US</Link></Dropdown.Item>
+                            <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black" to='/Pageerror'>PAGE 404</Link></Dropdown.Item>
+                            <Dropdown.Item href="#/action-3"><Link className="text-decoration-none text-black" to='/aboutus'>ABOUT US</Link></Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Link></li>

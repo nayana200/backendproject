@@ -11,13 +11,14 @@ import ResetPassword from './components/signinsignup/resetpassword'
 import SingleProduct from './components/productsdetails/singleproduct'
 import CheckoutForm from './components/order/checkout';
 
-
+import Aboutus from './components/aboutus/aboutus';
 import FAQ from './components/Faq/Faq';
 import Features from './components/features/features'
 import Service from './components/servies/servies'
 import Contact from './components/contact/contact'
 import Lasttestnews from './components/lasttestnews';
-import AccessorySideNav from './components/accessories/accossies'
+
+import Pageerror from './components/errorpage/Pageerror';
 import MainHome from './components/main/Main';
 const App = () => {
   return (
@@ -41,11 +42,13 @@ const App = () => {
           <Route path='/' element={<MainHome />} />
           <Route path='/products/:productId' element={<SingleProduct />} />
           <Route path='/Faq' element={<FAQ />} />
-          <Route path='/features' element={<Features />} />
-          <Route path='/servies' element={<Service />} />
 
+          <Route path='/Pageerror' element={<Pageerror />} />
+          <Route path='/servies' element={<Service />} />
+          <Route path='/aboutus' element={<Aboutus />} />
           <Route path='/contact' element={<Contact />} />
-          <Route path='/accossies' element={<AccessorySideNav />} />
+          <Route path='/features' element={<Features />} />
+
           <Route path='/cehckout' element={<CheckoutForm />} />
           <Route path='/lasttestnews' element={<Lasttestnews />} />
         </Routes>

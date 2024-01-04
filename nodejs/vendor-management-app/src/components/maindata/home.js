@@ -8,7 +8,7 @@ import ImageSlider from "./imageslider";
 
 
 const SideNav = ({ children }) => (
-    <div className="d-flex">
+    <div className="d-flex mt-5">
         <Col xs={3}>
             <ul className="list-unstyled d-flex flex-column row-gap-3 border border-2" style={{
                 width: "300px",
@@ -29,7 +29,7 @@ const SideNav = ({ children }) => (
             </ul>
         </Col>
         <Col xs={8}>
-            <ImageSlider images={['https://pixeltemplate.com/wordpress/shopeur/wp-content/uploads/revslider/wntr_homeslider/04c41f72f75d3c451cd237b511a966be-copy-100x50.jpg', 'https://pixeltemplate.com/wordpress/shopeur/wp-content/uploads/revslider/wntr_homeslider/04c41f72f75d3c451cd237b511a966be-copy-100x50.jpg', 'https://pixeltemplate.com/wordpress/shopeur/wp-content/uploads/revslider/wntr_homeslider/04c41f72f75d3c451cd237b511a966be-copy-100x50.jpg']} style={{ marginRight: "8px" }} />
+            <ImageSlider images={['https://elementor.dostguru.com/cartsly/wp-content/uploads/2022/01/s1-1920x660.jpg']} style={{ marginRight: "8px" }} />
         </Col>
     </div>
 );

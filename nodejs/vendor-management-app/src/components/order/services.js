@@ -9,7 +9,7 @@ const Services = () => {
                     <div className="col-md-4 col-12">
                         <div className="features mt-5">
                             <div className="image position-relative d-inline-block">
-                                <img src="images/icon/pen.svg" className="avatar avatar-small" alt="" />
+                                <img src="http://127.0.0.1:5500/images/icon/video.svg" className="avatar avatar-small" alt="" />
                             </div>
 
                             <div className="content mt-4">

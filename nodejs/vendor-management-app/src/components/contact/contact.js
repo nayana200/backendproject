@@ -3,12 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMapMarker, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import './contact.css';
 import { Link } from 'react-router-dom';
-
+import Navbar from '../navbar/navbar'
+import SubNav2 from '../navbar/secnavbar'
+import Main from '../navbar/respo'
+import MainNav from '../navbar/subnavbar'
+import Footer from '../footer'
 
 const Contact = () => {
 
     return (
         <>
+            <Navbar />
+            <SubNav2 />
+            <Main />
+            <MainNav />
             <div className="container mt-4 mb-4">
                 <div className="row">
 
@@ -105,6 +113,7 @@ const Contact = () => {
 
                 </div>
             </div>
+            <Footer />
         </>
     )
 }
